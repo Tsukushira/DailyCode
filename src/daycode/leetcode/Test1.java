@@ -22,11 +22,20 @@ public class Test1 {
 //        System.out.println(grayCode1(2));
 //        System.out.println(grayCode1(3));
 
-        int[][] stations = {{10, 60}, {20, 30}, {30, 30}, {60, 40}};
-        System.out.println(minRefuelStops(100, 10, stations));
+//        int[][] stations = {{10, 60}, {20, 30}, {30, 30}, {60, 40}};
+//        System.out.println(minRefuelStops(100, 10, stations));
+//
+//        stations = new int[][]{{10, 100}};
+//        System.out.println(minRefuelStops(10, 1, stations));
 
-        stations = new int[][]{{10, 100}};
-        System.out.println(minRefuelStops(10, 1, stations));
+        int[] nums = {3,5,4,1};
+        nextPermutation(nums);
+        System.out.println(Arrays.toString(nums));
+
+        nums = new int[] {3,2,1};
+        nextPermutation(nums);
+        System.out.println(Arrays.toString(nums));
+
     }
 
     /**
@@ -249,6 +258,47 @@ public class Test1 {
             startFuel += queue.poll();
         }
         return res;
+    }
+
+    /**
+     * 31. 下一个排列
+     * 给定一个整数数组 nums ，找出 nums 的下一个排列。
+     * 整数数组的 下一个排列 是指其整数的下一个字典序更大的排列。
+     * 如果不存在下一个更大的排列，那么这个数组必须重排为字典序最小的排列（即，按元素升序排列）。
+     * 必须 原地 修改，只允许使用额外常数空间。
+     *
+     * @param nums
+     */
+    public static void nextPermutation(int[] nums) {
+        int n = nums.length;// 3 5 4 1 -> 4 1 3 5
+        int a = n - 2, b = n - 1;
+        while (a < b && a >= 0) {
+            while (a >= 0 && nums[a] >= nums[a + 1]) {
+                a--;
+            }
+            if (a < 0) {
+                a = 0;
+                while (a < b) {
+                    swap(nums, a++, b--);
+                }
+                break;
+            }
+            while (a < b && nums[b] <= nums[a]) {
+                b--;
+            }
+            swap(nums, a, b);
+            a++;
+            b = n - 1;
+            while (a < b) {
+                swap(nums, a++, b--);
+            }
+        }
+    }
+
+    private static void swap(int[] nums, int a, int b) {
+        int temp = nums[a];
+        nums[a] = nums[b];
+        nums[b] = temp;
     }
 
 }
