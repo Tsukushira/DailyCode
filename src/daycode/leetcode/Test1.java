@@ -22,11 +22,11 @@ public class Test1 {
 //        System.out.println(grayCode1(2));
 //        System.out.println(grayCode1(3));
 
-        int[][] stations = {{10, 60},{20,30},{30,30},{60,40}};
-        System.out.println(minRefuelStops(100,10,stations));
+        int[][] stations = {{10, 60}, {20, 30}, {30, 30}, {60, 40}};
+        System.out.println(minRefuelStops(100, 10, stations));
 
-        stations = new int[][] {{10, 100}};
-        System.out.println(minRefuelStops(10,1,stations));
+        stations = new int[][]{{10, 100}};
+        System.out.println(minRefuelStops(10, 1, stations));
     }
 
     /**
@@ -250,5 +250,6 @@ public class Test1 {
         }
         return res;
     }
+
 }
 
