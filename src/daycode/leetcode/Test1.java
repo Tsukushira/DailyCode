@@ -295,6 +295,12 @@ public class Test1 {
         }
     }
 
+    /**
+     * 交换数组中两个位置的值
+     * @param nums
+     * @param a
+     * @param b
+     */
     private static void swap(int[] nums, int a, int b) {
         int temp = nums[a];
         nums[a] = nums[b];
