@@ -28,13 +28,24 @@ public class Test1 {
 //        stations = new int[][]{{10, 100}};
 //        System.out.println(minRefuelStops(10, 1, stations));
 
-        int[] nums = {3,5,4,1};
-        nextPermutation(nums);
-        System.out.println(Arrays.toString(nums));
+//        int[] nums = {3, 5, 4, 1};
+//        nextPermutation(nums);
+//        System.out.println(Arrays.toString(nums));
+//
+//        nums = new int[]{3, 2, 1};
+//        nextPermutation(nums);
+//        System.out.println(Arrays.toString(nums));
 
-        nums = new int[] {3,2,1};
-        nextPermutation(nums);
-        System.out.println(Arrays.toString(nums));
+//        System.out.println(multiply("123", "0"));
+//        System.out.println(multiply("10", "10"));
+//        System.out.println(multiply("123", "456"));
+//        System.out.println(multiply("123456789", "999999999999"));
+
+        int[][] intervals = {{1,2}, {3,5}, {8,9}};
+        System.out.println(Arrays.deepToString(insert(intervals, new int[] {5,6})));
+        System.out.println(Arrays.deepToString(insert(intervals, new int[] {5,8})));
+        System.out.println(Arrays.deepToString(insert(intervals, new int[] {6,7})));
+        System.out.println(Arrays.deepToString(insert(intervals, new int[] {5,10})));
 
     }
 
@@ -296,7 +307,8 @@ public class Test1 {
     }
 
     /**
-     * 交换数组中两个位置的值
+     * 交换数组中a，b两个位置的值
+     *
      * @param nums
      * @param a
      * @param b
@@ -307,5 +319,70 @@ public class Test1 {
         nums[b] = temp;
     }
 
+    /**
+     * 43. 字符串相乘
+     * 给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
+     * num1 和 num2 只能由数字组成。
+     * num1 和 num2 都不包含任何前导零，除了数字0本身。
+     * 1 <= num1.length, num2.length <= 200。
+     *
+     * @param num1
+     * @param num2
+     * @return
+     */
+    public static String multiply(String num1, String num2) {
+        if (num1.equals("0") || num2.equals("0")) {
+            return "0";
+        }
+        char[] cn1 = num1.toCharArray();
+        char[] cn2 = num2.toCharArray();
+        int n1 = cn1.length - 1;
+        int n2 = cn2.length - 1;
+        int[] res = new int[n1 + n2 + 2];
+
+        for (int i = n1; i >= 0; i--) {
+            int x = cn1[i] - '0';
+            for (int j = n2; j >= 0; j--) {
+                int y = cn2[j] - '0';
+                res[i + j + 1] += x * y;
+            }
+        }
+        for (int i = res.length - 1; i > 0; i--) {
+            res[i - 1] += res[i] / 10;
+            res[i] = res[i] % 10;
+        }
+        StringBuilder sb = new StringBuilder();
+        int i = res[0] == 0 ? 1 : 0;
+        while (i < res.length) {
+            sb.append(res[i++]);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 57. 插入区间
+     * 在列表中插入一个新的区间，你需要确保列表中的区间仍然有序且不重叠（如果有必要的话，可以合并区间）。
+     *
+     * @param intervals   一个无重叠的 ，按照区间起始端点排序的区间列表。
+     * @param newInterval 需要插入列表中的一个新的区间
+     * @return 插入新区间后的列表
+     */
+    public static int[][] insert(int[][] intervals, int[] newInterval) {
+        List<int[]> res = new ArrayList<>();
+        int n = intervals.length;
+        int i = 0;
+        while (i < n && newInterval[0] > intervals[i][1]) {
+            res.add(intervals[i++]);
+        }
+        newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
+        while (i < n && newInterval[1] >= intervals[i][0]) {
+            newInterval[1] = Math.max(newInterval[1], intervals[i++][1]);
+        }
+        res.add(newInterval);
+        while (i < n) {
+            res.add(intervals[i++]);
+        }
+        return res.toArray(new int[res.size()][]);
+    }
 }
 
