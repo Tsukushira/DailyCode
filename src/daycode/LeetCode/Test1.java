@@ -1,4 +1,4 @@
-package daycode.leetcode;
+package daycode.LeetCode;
 
 import java.util.*;
 
@@ -41,11 +41,24 @@ public class Test1 {
 //        System.out.println(multiply("123", "456"));
 //        System.out.println(multiply("123456789", "999999999999"));
 
-        int[][] intervals = {{1,2}, {3,5}, {8,9}};
-        System.out.println(Arrays.deepToString(insert(intervals, new int[] {5,6})));
-        System.out.println(Arrays.deepToString(insert(intervals, new int[] {5,8})));
-        System.out.println(Arrays.deepToString(insert(intervals, new int[] {6,7})));
-        System.out.println(Arrays.deepToString(insert(intervals, new int[] {5,10})));
+//        int[][] intervals = {{1, 2}, {3, 5}, {8, 9}};
+//        System.out.println(Arrays.deepToString(insert(intervals, new int[]{5, 6})));
+//        System.out.println(Arrays.deepToString(insert(intervals, new int[]{5, 8})));
+//        System.out.println(Arrays.deepToString(insert(intervals, new int[]{6, 7})));
+//        System.out.println(Arrays.deepToString(insert(intervals, new int[]{5, 10})));
+
+
+//        System.out.println(addBinary("111111", "101010"));
+//        System.out.println(addBinary("111111", "111111"));
+
+//        int[] nums = {1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 5, 6};
+//        int n = removeDuplicates(nums);
+//        for (int i = 0; i < n; i++) {
+//            System.out.print(nums[i] + " ");
+//        }
+
+        int[] nums = {3, 4, 0, 1, 1, 2, 2, 3};
+        System.out.println(search(nums, 0));
 
     }
 
@@ -383,6 +396,84 @@ public class Test1 {
             res.add(intervals[i++]);
         }
         return res.toArray(new int[res.size()][]);
+    }
+
+
+    /**
+     * 67. 二进制求和
+     * 1 <= a.length, b.length <= 10^4
+     *
+     * @param a 二进制字符串
+     * @param b 二进制字符串
+     * @return 返回它们的和（用二进制表示）
+     */
+    public static String addBinary(String a, String b) {
+        StringBuilder sb = new StringBuilder();
+        int carry = 0;
+        int n1 = a.length() - 1;
+        int n2 = b.length() - 1;
+        while (n1 >= 0 || n2 >= 0) {
+            if (n1 >= 0) carry += a.charAt(n1--) - '0';
+            if (n2 >= 0) carry += b.charAt(n2--) - '0';
+            sb.insert(0, carry % 2);
+            carry >>= 1;
+        }
+        return carry == 0 ? sb.toString() : "1" + sb.toString();
+    }
+
+    /**
+     * 80. 删除有序数组中的重复项 II
+     * 原地删除重复出现的元素，使得出现次数超过两次的元素只出现两次。
+     *
+     * @param nums 一个升序数组nums
+     * @return 返回删除后数组的新长度
+     */
+    public static int removeDuplicates(int[] nums) {
+        int i = 0;
+        for (int n : nums) {
+            if (i < 2 || nums[i - 2] < n) {
+                nums[i++] = n;
+            }
+        }
+        return i;
+    }
+
+    /**
+     * 81. 搜索旋转排序数组 II
+     * 给定一个旋转后的数组 nums 和一个整数 target ，判断给定的目标值是否存在于数组中。
+     * 如果 nums 中存在这个目标值 target ，则返回 true ，否则返回 false 。
+     * 你必须尽可能减少整个操作步骤。
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public static boolean search(int[] nums, int target) {
+        int n = nums.length;
+        int left = 0, right = n - 1;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target) {
+                return true;
+            }
+            if (nums[left] == nums[mid] && nums[mid] == nums[right]) {
+                left++;
+                right--;
+            } else if (nums[left] <= nums[mid]) {
+                if (nums[left] <= target && target < nums[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
+            } else {
+                if (nums[mid] < target && target <= nums[n - 1]) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+        }
+        return false;
     }
 }
 
