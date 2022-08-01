@@ -1,4 +1,4 @@
-package design.MagicDictionary.TireTree;
+package design.TireTree.MagicDictionary;
 
 public class Solution {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package design.MagicDictionary.TireTree;
+package design.TireTree.MagicDictionary;
 
 /**
  * 676. 实现一个魔法字典
@@ -6,7 +6,7 @@ package design.MagicDictionary.TireTree;
  * 如果给出一个单词，请判定能否只将这个单词中一个字母换成另一个字母，使得所形成的新单词存在于你构建的字典中。
  */
 public class MagicDictionary {
-    private Tire root;
+    Tire root;
 
     MagicDictionary() {
         root = new Tire();

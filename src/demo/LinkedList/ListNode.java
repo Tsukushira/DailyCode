@@ -2,8 +2,8 @@ package demo.LinkedList;
 
 
 public class ListNode {
-    int val;
-    ListNode next;
+    public int val;
+    public ListNode next;
 
     ListNode() {
     }
@@ -43,6 +43,20 @@ public class ListNode {
         } else {
             sb.append("]");
         }
-        System.out.println(sb.toString());
+        System.out.println(sb);
+    }
+
+    /**
+     * 获取链表的长度
+     * @param head
+     * @return
+     */
+    public static int getLength(ListNode head) {
+       int len = 0;
+       while(head != null) {
+           len++;
+           head = head.next;
+       }
+       return len;
     }
 }

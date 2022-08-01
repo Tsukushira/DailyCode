@@ -89,9 +89,10 @@ public class TreeNode {
     /**
      * 从层次遍历中递归建树
      * 通过String重建二叉树，节点的数据不可大于9，null节点使用 '#' 表示
+     * @param n 调用时n赋值为0
      */
     public static TreeNode createTree(String str, int n) {
-        if (str == null || str.length() == 0 || n >= str.length() || str.charAt(n) == '#') {
+        if (str == null || n < 0 || n >= str.length() || str.charAt(n) == '#') {
             return null;
         }
         int l = 2 * n + 1;
@@ -105,9 +106,10 @@ public class TreeNode {
     /**
      * 从层次遍历(String[])中重建二叉树
      * 使用字符串数组，null节点使用 "#" 表示
+     * @param n 调用时n赋值为0
      */
     public static TreeNode createTree(String[] strs, int n) {
-        if (strs == null || strs.length == 0 || n >= strs.length || strs[n].equals("#")) {
+        if (strs == null || n < 0 || n >= strs.length || strs[n].equals("#")) {
             return null;
         }
         int idxl = 2 * n + 1;
@@ -121,9 +123,10 @@ public class TreeNode {
     /**
      * 从层次遍历中递归建树
      * 通过String重建二叉树，节点的数据不可大于9，null节点使用 '#' 表示
+     * @param n 调用时n赋值为0
      */
     public static TreeNode buildTree(String str, int n) {
-        if (str == null || str.length() == 0 || n >= str.length() || str.charAt(n) == '#') {
+        if (str == null || n < 0 || n >= str.length() || str.charAt(n) == '#') {
             return null;
         }
         int l = 2 * n + 1;
@@ -134,9 +137,10 @@ public class TreeNode {
     /**
      * 从层次遍历建树
      * 使用字符串数组，null节点使用 "#" 表示
+     * @param n 调用时n赋值为0
      */
     public static TreeNode buildTree(String[] strs, int n) {
-        if (strs == null || strs.length == 0 || n >= strs.length || strs[n].equals("#")) {
+        if (strs == null || n < 0 || n >= strs.length || strs[n].equals("#")) {
             return null;
         }
         int idxl = 2 * n + 1;
@@ -257,7 +261,7 @@ public class TreeNode {
     /**
      * 序列化二叉树为String[]，层次遍历，BFS
      */
-    public static String[] serialize(TreeNode root) {
+    public static String[] serializeByBFS(TreeNode root) {
         if (root == null) {
             return null;
         }
@@ -305,7 +309,7 @@ public class TreeNode {
     /**
      * 序列化二叉树为String，前序遍历， dfs
      */
-    public static String serializeToString(TreeNode root) {
+    public static String serializeByPreOrder(TreeNode root) {
         if (root == null) {
             return null;
         }

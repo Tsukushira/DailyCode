@@ -1,4 +1,4 @@
-package design.MyCalendar.TreeSet;
+package design.SegTree.MyCalendar1;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -14,10 +14,10 @@ import java.util.TreeSet;
  * boolean book(int start, int end) 如果可以将日程安排成功添加到日历中而不会导致重复预订，返回 true 。
  * 否则，返回 false 并且不要将该日程安排添加到日历中。
  */
-public class MyCalendar {
-    private Set<int[]> calendar;
+public class MyCalendar1Set {
+    Set<int[]> calendar;
 
-    MyCalendar() {
+    MyCalendar1Set() {
         calendar = new TreeSet<>((a, b) -> {
             if (a[1] < b[0]) {
                 return -1;

@@ -1,6 +1,7 @@
-package daycode.LeetCode;
+package daycode.leetcode;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Test1 {
     public static void main(String[] args) {
@@ -57,9 +58,20 @@ public class Test1 {
 //            System.out.print(nums[i] + " ");
 //        }
 
-        int[] nums = {3, 4, 0, 1, 1, 2, 2, 3};
-        System.out.println(search(nums, 0));
+//        int[] nums = {3, 4, 0, 1, 1, 2, 2, 3};
+//        System.out.println(search(nums, 0));
 
+//        System.out.println(getPermutation(6, 666));
+//        System.out.println(getPermutation(7, 777));
+
+//        String[] words = {"This", "is", "an", "example", "of", "text", "justification."};
+//        System.out.println(fullJustify(words, 16));
+//        System.out.println(fullJustify(words, 20));
+//        System.out.println(fullJustify(words, 26));
+
+
+        int[][] isInfected = {{0, 1, 0, 0, 0, 0, 0, 1}, {0, 1, 0, 0, 0, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0, 0}};
+        System.out.println(containVirus(isInfected));
     }
 
     /**
@@ -418,7 +430,7 @@ public class Test1 {
             sb.insert(0, carry % 2);
             carry >>= 1;
         }
-        return carry == 0 ? sb.toString() : "1" + sb.toString();
+        return carry == 0 ? sb.toString() : "1" + sb;
     }
 
     /**
@@ -475,5 +487,203 @@ public class Test1 {
         }
         return false;
     }
-}
 
+    /**
+     * 60. 排列序列, (解题方法：康拓展开)
+     * 给出集合 [1,2,3,...,n]，其所有元素共有 n! 种排列。
+     * 当 n = 3 时，按大小顺序的排列情况："123", "132", "213", "231", "312", "321"。
+     * 给定 n 和 k，返回第 k 个排列。
+     *
+     * @param n
+     * @param k
+     * @return
+     */
+    public static String getPermutation(int n, int k) {
+        int[] digit = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        List<Integer> dList = Arrays.stream(digit).boxed().collect(Collectors.toList());
+        int[] factor = {1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880};
+        StringBuilder sb = new StringBuilder();
+        k--;
+        while (n > 0) {
+            int idx = k / factor[n - 1];
+            sb.append(dList.remove(idx));
+            k %= factor[--n];
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 68. 文本左右对齐
+     * 重新排版单词，使其成为每行恰好有 maxWidth 个字符，且左右两端对齐的文本。
+     * 要求尽可能多地往每行中放置单词。必要时可用空格 ' ' 填充，使得每行恰好有 maxWidth 个字符。
+     * 要求尽可能均匀分配单词间的空格数量。如果某一行单词间的空格不能均匀分配，则左侧放置的空格数要多于右侧的空格数。
+     * 文本的最后一行应为左对齐，且单词之间不插入额外的空格。
+     * <p>
+     * 注意：
+     * 单词是指由非空格字符组成的字符序列。
+     * 每个单词的长度大于 0，小于等于 maxWidth。
+     * 输入单词数组 words 至少包含一个单词。
+     * <p>
+     * 示例：
+     * 输入: words = ["This", "is", "an", "example", "of", "text", "justification."], maxWidth = 16
+     * 输出:
+     * [
+     * "This    is    an",
+     * "example  of text",
+     * "justification.  "
+     * ]
+     *
+     * @param words    单词数组
+     * @param maxWidth 重新排版words中的单词，使其成为每行恰好有 maxWidth 个字符
+     * @return
+     */
+    public static List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> ans = new ArrayList<>();
+        int n = words.length, right = 0;
+        while (true) {
+            int left = right;
+            int sumLen = 0;
+            while (right < n && sumLen + words[right].length() + right - left <= maxWidth) {
+                sumLen += words[right++].length();
+            }
+            // 当前行是最后一行
+            if (right == n) {
+                StringBuilder sb = join(words, left, n, " ");
+                sb.append(blank(maxWidth - sb.length()));// 插入右边剩余的空格
+                ans.add(sb.toString());
+                return ans;
+            }
+
+            int numWords = right - left;
+            int numSpaces = maxWidth - sumLen;
+
+            // 当前行只有一个单词
+            if (numWords == 1) {
+                ans.add(words[left] + blank(numSpaces));
+                continue;
+            }
+            // 当前行不止一个单词
+            int avgSpaces = numSpaces / (numWords - 1);
+            int extraSpaces = numSpaces % (numWords - 1);
+            String sb = join(words, left, left + extraSpaces + 1, blank(avgSpaces + 1)) +// 拼接额外加一个空格的单词
+                    blank(avgSpaces) +
+                    join(words, left + extraSpaces + 1, right, blank(avgSpaces));// 拼接其余单词
+            ans.add(sb);
+        }
+    }
+
+    /**
+     * @param n
+     * @return 返回长度为 n 的由空格组成的字符串
+     */
+    private static String blank(int n) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            sb.append(' ');
+        }
+        return sb.toString();
+    }
+
+    /**
+     * @param words
+     * @param left
+     * @param right
+     * @param sep
+     * @return 返回用 sep 拼接 [left, right) 范围内的 words 组成的字符串
+     */
+    private static StringBuilder join(String[] words, int left, int right, String sep) {
+        StringBuilder sb = new StringBuilder(words[left]);
+        for (int i = left + 1; i < right; i++) {
+            sb.append(sep).append(words[i]);
+        }
+        return sb;
+    }
+
+    /**
+     * 749. 隔离病毒
+     * 每天晚上，病毒会从被感染区域向相邻未感染区域扩散，除非被防火墙隔离。
+     * 可以在任意 2 个相邻单元之间的共享边界上安装一个防火墙。
+     * 每天只能安装一系列防火墙来隔离其中一个被病毒感染的区域（一个区域或连续的一片区域），
+     * 且该感染区域对未感染区域的威胁最大且 保证唯一。
+     * 如果可以成功使得最后有部分区域不被病毒感染，返回需要使用的防火墙个数;
+     * 否则，返回在矩阵被病毒全部感染时已安装的防火墙个数。
+     *
+     * @param isInfected m x n 的二维矩阵，isInfected[i][j] == 0表示该区域未感染病毒，isInfected[i][j] == 1表示该区域已感染病毒。
+     * @return 安装的防火墙个数
+     */
+    public static int containVirus(int[][] isInfected) {
+        int ans = 0;
+        int m = isInfected.length, n = isInfected[0].length;
+        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        while (true) {
+            List<Set<Integer>> neighbors = new ArrayList<>();
+            List<Integer> firewalls = new ArrayList<>();
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (isInfected[i][j] == 1) {
+                        Queue<int[]> queue = new ArrayDeque<>();
+                        queue.offer(new int[]{i, j});
+                        Set<Integer> neighbor = new HashSet<>();
+                        int firewall = 0, idx = neighbors.size() + 1;
+                        isInfected[i][j] = -idx;
+
+                        // 从[i, j]开始BFS，将 1 变为-idx，将 1 相邻的 0 记录在Set里，记录需要的防火墙数量。
+                        while (!queue.isEmpty()) {
+                            int[] arr = queue.poll();
+                            int x = arr[0], y = arr[1];
+                            for (int[] dir : dirs) {
+                                int nx = x + dir[0], ny = y + dir[1];
+                                if(nx >=0 && nx < m && ny >= 0 && ny < n) {
+                                    if (isInfected[nx][ny] == 1) {
+                                        queue.offer(new int[]{nx, ny});
+                                        isInfected[nx][ny] = -idx;
+                                    } else if (isInfected[nx][ny] == 0) {
+                                        neighbor.add((nx << 6) ^ ny);
+                                        firewall++;
+                                    }
+                                }
+                            }
+                        }
+                        neighbors.add(neighbor);
+                        firewalls.add(firewall);
+                    }
+                }
+            }
+            if (neighbors.isEmpty()) {
+                break;
+            }
+            if (neighbors.size() == 1) {
+                return ans + firewalls.get(0);
+            }
+
+            int idx = 0;
+            for (int i = 1; i < neighbors.size(); i++) {// 找到感染威胁最大的区域
+                if (neighbors.get(i).size() > neighbors.get(idx).size()) {
+                    idx = i;
+                }
+            }
+            ans += firewalls.get(idx);
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (isInfected[i][j] < 0) {
+                        if (isInfected[i][j] == -idx - 1) {
+                            isInfected[i][j] = 2;// 将防火墙围起来的病毒区域标记为2
+                        } else {
+                            isInfected[i][j] = 1;// 其它病毒区域恢复为1
+                        }
+                    }
+                }
+            }
+            // 将病毒感染区域扩散
+            for (int i = 0; i < neighbors.size(); i++) {
+                if (i != idx) {
+                    for (int val : neighbors.get(i)) {
+                        int x = val >> 6, y = val & ((1 << 6) - 1);
+                        isInfected[x][y] = 1;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+}
